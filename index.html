@@ -32,7 +32,6 @@ body{
     perspective:1000px;
 }
 
-/* CUERPO */
 .cuerpo{
     position:absolute;
     width:100%;
@@ -41,7 +40,6 @@ body{
     border-radius:6px;
 }
 
-/* TAPA */
 .tapa{
     position:absolute;
     width:100%;
@@ -52,7 +50,6 @@ body{
     transition: transform 0.8s ease;
 }
 
-/* MENSAJE */
 .mensaje{
     position:absolute;
     width:100%;
@@ -63,7 +60,6 @@ body{
     font-weight:bold;
 }
 
-/* ABRIR */
 .sobre.abrir .tapa{
     transform: rotateX(180deg);
 }
@@ -118,7 +114,6 @@ body{
     pointer-events:none;
 }
 
-/* ELEMENTOS */
 .text{ position:absolute; white-space:nowrap; opacity:0.9;}
 .heart{ position:absolute; opacity:0.9;}
 .imgRain{
@@ -128,12 +123,10 @@ body{
     box-shadow:0 0 15px pink;
 }
 
-/* COLORES */
 .white{ color:#fff; text-shadow:0 0 8px #fff; }
 .pink{ color:#ff4da6; text-shadow:0 0 10px #ff4da6; }
 .red{ color:#ff0000; text-shadow:0 0 10px red; }
 
-/* ANIMACIONES */
 @keyframes caer{
     from{ transform:translateY(var(--startY)); opacity:0;}
     to{ transform:translateY(calc(var(--startY) + var(--distance))); opacity:1;}
@@ -148,7 +141,6 @@ body{
 
 <body>
 
-<!-- 💌 CARTA -->
 <div id="carta">
     <div class="sobre" id="sobre">
         <div class="tapa"></div>
@@ -157,19 +149,17 @@ body{
     </div>
 </div>
 
-<!-- ⏳ LOADER -->
 <div id="loader">
     <div class="loader-box">
         <div class="barra"></div>
     </div>
 </div>
 
-<!-- 🎵 MÚSICA -->
+<!-- 🎵 AUDIO DROPBOX FUNCIONAL -->
 <audio id="musica" loop preload="auto">
-<source src="musica.mp3" type="audio/mpeg">
+<source src="https://dl.dropboxusercontent.com/scl/fi/459rbeztdoul6jgldt2g4/Jay_Wheeler.mp3" type="audio/mpeg">
 </audio>
 
-<!-- CAPAS -->
 <div class="layer" id="back"></div>
 <div class="layer" id="mid"></div>
 <div class="layer" id="front"></div>
@@ -193,7 +183,6 @@ const capas=[
 const textos=["I love you","Te amo 💘","Love you ❤️","Muak 💋"];
 const colores=["white","pink","red"];
 
-/* LLUVIA */
 function crearElemento(layer){
 let el;
 let tipo=Math.random();
@@ -235,14 +224,12 @@ layer.el.appendChild(el);
 setTimeout(()=>el.remove(),dur*1000);
 }
 
-/* INICIAR */
 function iniciarLluvia(){
 capas.forEach(l=>{
 setInterval(()=>crearElemento(l),l.density);
 });
 }
 
-/* 💥 EXPLOSIÓN */
 document.addEventListener("click",e=>{
 for(let i=0;i<80;i++){
 crearParticula(e.clientX,e.clientY);
@@ -257,7 +244,6 @@ el.classList.add(colores[Math.floor(Math.random()*colores.length)]);
 el.style.position="fixed";
 el.style.left=x+"px";
 el.style.top=y+"px";
-el.style.fontSize=(10+Math.random()*20)+"px";
 
 let angle=Math.random()*360;
 let distance=80+Math.random()*200;
@@ -273,19 +259,13 @@ document.body.appendChild(el);
 setTimeout(()=>el.remove(),1000);
 }
 
-/* 💌 CARTA */
 const sobre=document.getElementById("sobre");
 
 sobre.onclick=()=>{
 
-// 🔥 ACTIVAR AUDIO REAL (NO SE BLOQUEA)
 if(!audioActivado){
-    musica.volume = 0.7;
-
-    // reproducir inmediatamente en el click
+    musica.volume = 0;
     musica.play().then(()=>{
-        // bajamos volumen para que no se escuche aún
-        musica.volume = 0;
         audioActivado = true;
     }).catch(()=>{});
 }
@@ -300,17 +280,11 @@ setTimeout(()=>{
         loader.style.display="none";
         iniciarLluvia();
 
-        // 🔥 AHORA SUBE EL VOLUMEN (YA NO SE BLOQUEA)
-        musica.currentTime = 0;
-
-        let vol = 0;
-        const fade = setInterval(()=>{
-            vol += 0.05;
-            musica.volume = vol;
-
-            if(vol >= 0.7){
-                clearInterval(fade);
-            }
+        let vol=0;
+        const fade=setInterval(()=>{
+            vol+=0.05;
+            musica.volume=vol;
+            if(vol>=0.7) clearInterval(fade);
         },200);
 
     },2500);
