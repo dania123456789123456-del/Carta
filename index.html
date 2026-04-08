@@ -165,8 +165,8 @@ body{
 </div>
 
 <!-- 🎵 MÚSICA -->
-<audio id="musica" loop>
-<source src="musica.mp3">
+<audio id="musica" loop preload="auto">
+<source src="musica.mp3" type="audio/mpeg">
 </audio>
 
 <!-- CAPAS -->
@@ -175,6 +175,9 @@ body{
 <div class="layer" id="front"></div>
 
 <script>
+const musica = document.getElementById("musica");
+let audioActivado = false;
+
 const imagenes=[
 "https://i.postimg.cc/nrt3JvVQ/IMG-20241128-WA0128.jpg",
 "https://i.postimg.cc/CKzPHh6g/IMG-20241128-WA0129.jpg",
@@ -274,17 +277,31 @@ setTimeout(()=>el.remove(),1000);
 const sobre=document.getElementById("sobre");
 
 sobre.onclick=()=>{
+
+// 🔥 ACTIVAR AUDIO (clave para móviles)
+if(!audioActivado){
+    musica.volume = 0.7;
+    musica.play().then(()=>{
+        musica.pause();
+        musica.currentTime = 0;
+        audioActivado = true;
+    }).catch(()=>{});
+}
+
 sobre.classList.add("abrir");
 
 setTimeout(()=>{
-carta.style.display="none";
-loader.style.display="flex";
+    carta.style.display="none";
+    loader.style.display="flex";
 
-setTimeout(()=>{
-loader.style.display="none";
-iniciarLluvia();
-musica.play();
-},2500);
+    setTimeout(()=>{
+        loader.style.display="none";
+        iniciarLluvia();
+
+        // 🎵 reproducir música sincronizada
+        musica.play().catch(()=>{});
+
+    },2500);
 
 },1000);
 };
