@@ -278,12 +278,14 @@ const sobre=document.getElementById("sobre");
 
 sobre.onclick=()=>{
 
-// 🔥 ACTIVAR AUDIO (clave para móviles)
+// 🔥 ACTIVAR AUDIO REAL (NO SE BLOQUEA)
 if(!audioActivado){
     musica.volume = 0.7;
+
+    // reproducir inmediatamente en el click
     musica.play().then(()=>{
-        musica.pause();
-        musica.currentTime = 0;
+        // bajamos volumen para que no se escuche aún
+        musica.volume = 0;
         audioActivado = true;
     }).catch(()=>{});
 }
@@ -298,8 +300,18 @@ setTimeout(()=>{
         loader.style.display="none";
         iniciarLluvia();
 
-        // 🎵 reproducir música sincronizada
-        musica.play().catch(()=>{});
+        // 🔥 AHORA SUBE EL VOLUMEN (YA NO SE BLOQUEA)
+        musica.currentTime = 0;
+
+        let vol = 0;
+        const fade = setInterval(()=>{
+            vol += 0.05;
+            musica.volume = vol;
+
+            if(vol >= 0.7){
+                clearInterval(fade);
+            }
+        },200);
 
     },2500);
 
